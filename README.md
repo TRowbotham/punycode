@@ -6,6 +6,9 @@
 [![PHP Version](https://img.shields.io/packagist/v/rowbot/punycode?style=flat-square)](https://packagist.org/packages/rowbot/punycode)
 [![Total Downloads](https://img.shields.io/packagist/dt/rowbot/punycode?style=flat-square)](https://packagist.org/packages/rowbot/punycode)
 
+An implementation of RFC 3492 Punycode in PHP, based on the sample implementation in [Appendix C](https://tools.ietf.org/html/rfc3492#appendix-C).
+This is NOT a substitue for `idn_to_ascii` and `idn_to_utf8`.
+
 ## Requirements
 
 * PHP 7.1+
