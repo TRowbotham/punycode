@@ -11,6 +11,7 @@ use Rowbot\Punycode\Exception\OverflowException;
 use function array_map;
 use function array_splice;
 use function chr;
+use function func_num_args;
 use function implode;
 use function intdiv;
 use function str_split;
@@ -108,7 +109,7 @@ final class Punycode
         $b = $lastDelimIndex === false ? 0 : $lastDelimIndex;
         $inputLength = strlen($input);
         $output = [];
-        $hasCaseFlags = $caseFlags !== [];
+        $wantsCaseFlags = func_num_args() > 2;
 
         if ($b > $maxOut) {
             throw new OutputSizeExceededException();
@@ -121,7 +122,7 @@ final class Punycode
                 throw new InvalidInputException();
             }
 
-            if ($hasCaseFlags) {
+            if ($wantsCaseFlags) {
                 $caseFlags[$out] = self::flagged($bytes[$j]);
             }
 
@@ -188,7 +189,7 @@ final class Punycode
                 throw new OutputSizeExceededException();
             }
 
-            if ($hasCaseFlags) {
+            if ($wantsCaseFlags) {
                 array_splice($caseFlags, $i, 0, [self::flagged($bytes[$n - 1])]);
             }
 

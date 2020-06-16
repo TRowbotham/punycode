@@ -202,5 +202,10 @@ class PunycodeTest extends TestCase
         $d = Punycode::decode($e, null, $c);
         self::assertSame([true, true, true], $c);
         self::assertSame('ABC', $d);
+
+        $c = [];
+        $d = Punycode::decode($e, null, $c);
+        self::assertSame([true, true, true], $c);
+        self::assertSame('ABC', $d);
     }
 }
