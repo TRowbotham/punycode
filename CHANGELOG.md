@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.2] - 2020-07-15
+
+### Added
+
+* Minor performance improvements
+
 ## [1.0.1] - 2020-06-16
 
 ### Fixed
