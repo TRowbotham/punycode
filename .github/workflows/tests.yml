@@ -20,6 +20,7 @@ jobs:
           - 7.3
           - 7.4
           - 8.0
+          - 8.1
         operating-system: [ ubuntu-latest ]
 
     steps:
@@ -64,7 +65,6 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - 8.1
           - nightly
         operating-system: [ ubuntu-latest ]
 
