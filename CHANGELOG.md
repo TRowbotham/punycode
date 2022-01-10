@@ -1,5 +1,14 @@
 # Changelog
 
+## [Unreleased]
+
+## [1.0.3] - 2022-01-10
+
+### Changed
+
+- Update PHPstan to 1.0
+- Switched to GitHub Actions
+
 ## [1.0.2] - 2020-07-15
 
 ### Added
