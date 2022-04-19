@@ -1,7 +1,7 @@
 # Punycode
 
 [![Software License](https://img.shields.io/github/license/TRowbotham/punycode?style=flat-square)](https://github.com/TRowbotham/punycode/blob/master/LICENSE)
-[!![GitHub Workflow Status](https://img.shields.io/github/workflow/status/TRowbotham/punycode/Tests?style=flat-square)](https://travis-ci.com/github/TRowbotham/punycode)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/TRowbotham/punycode/Tests?style=flat-square)](https://travis-ci.com/github/TRowbotham/punycode)
 [![Code Coverage](https://img.shields.io/codecov/c/github/TRowbotham/punycode/master?style=flat-square)](https://codecov.io/gh/TRowbotham/punycode)
 [![PHP Version](https://img.shields.io/packagist/v/rowbot/punycode?style=flat-square)](https://packagist.org/packages/rowbot/punycode)
 [![Total Downloads](https://img.shields.io/packagist/dt/rowbot/punycode?style=flat-square)](https://packagist.org/packages/rowbot/punycode)
