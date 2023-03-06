@@ -19,7 +19,7 @@ class PunycodeTest extends TestCase
      *
      * @return array<int, array<int, string>>
      */
-    public function punycodeProvider(): array
+    public static function punycodeProvider(): array
     {
         return [
             [
