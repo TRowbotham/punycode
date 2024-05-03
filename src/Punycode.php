@@ -99,7 +99,7 @@ final class Punycode
      *
      * @param array<int, bool> $caseFlags
      */
-    public static function decode(string $input, int $outLength = null, array &$caseFlags = []): string
+    public static function decode(string $input, ?int $outLength = null, array &$caseFlags = []): string
     {
         $n = self::INITIAL_N;
         $out = 0;
@@ -205,7 +205,7 @@ final class Punycode
      *
      * @param array<int, bool> $caseFlags
      */
-    public static function encode(string $input, int $outLength = null, array $caseFlags = []): string
+    public static function encode(string $input, ?int $outLength = null, array $caseFlags = []): string
     {
         $n = self::INITIAL_N;
         $delta = 0;

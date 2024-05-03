@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* Fix implicit nullable deprecation warning for PHP 8.4
+
 ## [1.0.3] - 2022-01-10
 
 ### Changed
