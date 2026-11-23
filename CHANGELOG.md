@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [1.0.5] - 2026-11-23
+
+* Fix overflow check during encoding
+
 ## [1.0.4] - 2024-05-02
 
 ### Fixed
