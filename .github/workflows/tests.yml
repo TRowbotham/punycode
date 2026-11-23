@@ -9,12 +9,13 @@ on:
 jobs:
   tests:
     name: Tests
-    runs-on: ${{ matrix.operating-system }}
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.php == 'nightly' }}
 
     strategy:
       fail-fast: false
       matrix:
-        php-version:
+        php:
           - 7.1
           - 7.2
           - 7.3
@@ -23,16 +24,21 @@ jobs:
           - 8.1
           - 8.2
           - 8.3
-        operating-system: [ ubuntu-latest ]
+          - 8.4
+          - 8.5
+          - 8.6
+          - nightly
+        os:
+          - ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}
+          php-version: ${{ matrix.php }}
           coverage: none
 
       - name: Get composer cache directory
@@ -47,7 +53,12 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install
+        run: |
+          if [[ '${{ matrix.php }}' == 'nightly' ]]; then
+            composer update --no-interaction --ignore-platform-reqs
+          else
+            composer update --no-interaction
+          fi
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyse
@@ -58,52 +69,13 @@ jobs:
       - name: Tests
         run: vendor/bin/phpunit
 
-  tests-unstable:
-    name: Test Unstable
-    runs-on: ${{ matrix.operating-system }}
-    continue-on-error: true
-
-    strategy:
-      fail-fast: false
-      matrix:
-        php-version:
-          - nightly
-        operating-system: [ ubuntu-latest ]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-          coverage: none
-
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install dependencies
-        run: composer install --ignore-platform-reqs
-
-      - name: Tests
-        run: vendor/bin/phpunit
-
   tests-code-coverage:
     name: Code Coverage
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -131,7 +103,7 @@ jobs:
           vendor/bin/phpunit --coverage-clover ./build/coverage/clover.xml
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./build/coverage/clover.xml
@@ -149,7 +121,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
