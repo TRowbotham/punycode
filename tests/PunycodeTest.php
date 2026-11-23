@@ -333,7 +333,7 @@ class PunycodeTest extends TestCase
         self::assertSame($decoded, Punycode::decode($encoded), $comment);
     }
 
-    public function encodeMaxLengthDataProvider(): array
+    public static function encodeMaxLengthDataProvider(): array
     {
         return array_filter(self::rfcExamplesProvider(), static function (array $data): bool {
             return mb_strlen($data[1], 'utf-8') > 10;
@@ -352,7 +352,7 @@ class PunycodeTest extends TestCase
     /**
      * @return array<int, array<int, string>>
      */
-    public function decodeMaxLengthDataProvider(): array
+    public static function decodeMaxLengthDataProvider(): array
     {
         return array_filter(self::rfcExamplesProvider(), static function (array $data): bool {
             return mb_strlen($data[0], 'utf-8') > 10;
@@ -371,7 +371,7 @@ class PunycodeTest extends TestCase
     /**
      * @return array<int, array<int, string>>
      */
-    public function nonAsciiDataProvider(): array
+    public static function nonAsciiDataProvider(): array
     {
         return array_filter(self::rfcExamplesProvider(), static function (array $data): bool {
             return preg_match('/[^\x00-\x7F]/', $data[0]) === 1;
