@@ -256,8 +256,12 @@ final class Punycode
             $n = $m;
 
             foreach ($codePoints as $j => $codePoint) {
-                if ($codePoint < $n && ++$delta === 0) {
-                    throw new OverflowException();
+                if ($codePoint < $n) {
+                    if ($delta === self::MAX_INT) {
+                        throw new OverflowException();
+                    }
+
+                    ++$delta;
                 } elseif ($codePoint === $n) {
                     $q = $delta;
 
