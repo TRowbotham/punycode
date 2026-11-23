@@ -19,7 +19,7 @@ class PunycodeTest extends TestCase
      *
      * @return array<int, array<int, string>>
      */
-    public static function punycodeProvider(): array
+    public static function rfcExamplesProvider(): array
     {
         return [
             [
@@ -121,6 +121,201 @@ class PunycodeTest extends TestCase
     }
 
     /**
+     * @see https://en.wikipedia.org/wiki/Punycode#Examples
+     *
+     * @return array<int, array<int, string>>
+     */
+    public static function wikipediaExamplesProvider(): array
+    {
+        return [
+            [
+                '',
+                '',
+                'Empty string',
+            ],
+            [
+                'a',
+                'a-',
+                'Only ASCII characters, one, lowercase.',
+            ],
+            [
+                'A',
+                'A-',
+                'Only ASCII characters, one, uppercase.',
+            ],
+            [
+                '3',
+                '3-',
+                'Only ASCII characters, one, a digit.'
+            ],
+            [
+                '-',
+                '--',
+                'Only ASCII characters, one, a hyphen.',
+            ],
+            [
+                '--',
+                '---',
+                'Only ASCII characters, two hyphens.',
+            ],
+            [
+                'London',
+                'London-',
+                'Only ASCII characters, more than one, no hyphens.',
+            ],
+            [
+                'Lloyd-Atkinson',
+                'Lloyd-Atkinson-',
+                'Only ASCII characters, one hyphen.',
+            ],
+            [
+                'This has spaces',
+                'This has spaces-',
+                'Only ASCII characters, with spaces.',
+            ],
+            [
+                '-> $1.00 <-',
+                '-> $1.00 <--',
+                'Only ASCII characters, mixed symbols.',
+            ],
+            [
+                'Б',
+                'd0a',
+                'No ASCII characters, one Cyrillic character.',
+            ],
+            [
+                'ü',
+                'tda',
+                'No ASCII characters, one Latin-1 Supplement character.',
+            ],
+            [
+                'α',
+                'mxa',
+                'No ASCII characters, one Greek character.',
+            ],
+            [
+                '例',
+                'fsq',
+                'No ASCII characters, one CJK character.',
+            ],
+            [
+                '😉',
+                'n28h',
+                'No ASCII characters, one emoji character.',
+            ],
+            [
+                'αβγ',
+                'mxacd',
+                'No ASCII characters, more than one character.',
+            ],
+            [
+                'München',
+                'Mnchen-3ya',
+                'Mixed string, with one character that is not an ASCII character.',
+            ],
+            [
+                'Mnchen-3ya',
+                'Mnchen-3ya-',
+                'Double-encoded Punycode of "München".',
+            ],
+            [
+                'München-Ost',
+                'Mnchen-Ost-9db',
+                'Mixed string, with one character that is not ASCII, and a hyphen.',
+            ],
+            [
+                'Bahnhof München-Ost',
+                'Bahnhof Mnchen-Ost-u6b',
+                'Mixed string, with one space, one hyphen, and one character that is not ASCII.',
+            ],
+            [
+                'abæcdöef',
+                'abcdef-qua4k',
+                'Mixed string, two non-ASCII characters.',
+            ],
+            [
+                'Αθήνα',
+                // 'jxafb0a0a', // The expexted value is incorrect for Puncycode, but correct for IDNA
+                'pwa2dj0a0a',
+                'Greek (monotonic), without ASCII.',
+            ],
+            [
+                'правда',
+                '80aafi6cg',
+                'Russian, without ASCII.',
+            ],
+            [
+                'โดเมน',
+                'l3ckx7ji',
+                'Thai, without ASCII.',
+            ],
+            [
+                '도메인',
+                'hq1bm8jm9l',
+                'Korean, without ASCII.',
+            ],
+            [
+                'ドメイン名例',
+                'eckwd4c7cu47r2wf',
+                'Japanese, without ASCII.',
+            ],
+            [
+                'MajiでKoiする5秒前',
+                'MajiKoi5-783gue6qz075azm5e',
+                'Japanese with ASCII.',
+            ],
+            [
+                '「bücher」',
+                'bcher-kva8445foa',
+                'Mixed non-ASCII scripts (Latin-1 Supplement and CJK).',
+            ],
+        ];
+    }
+
+    public static function punycodeProvider(): array
+    {
+        return [
+            [
+                'mañana',
+                'maana-pta',
+                'Spanish (Latin-1 Supplement)',
+            ],
+            [
+                'bücher',
+                'bcher-kva',
+                'German (Latin-1 Supplement)',
+            ],
+            [
+                'café',
+                'caf-dma',
+                'French (Latin-1 Supplement)',
+            ],
+            [
+                '👁️',
+                'v86cr064b',
+                '',
+            ],
+            [
+                '♡',
+                'c6h',
+                '',
+            ],
+            [
+                'ÜBER',
+                'BER-ska',
+                '',
+            ],
+            [
+                'sPhÈRè',
+                'sPhR-nka7q',
+                '',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider rfcExamplesProvider
+     * @dataProvider wikipediaExamplesProvider
      * @dataProvider punycodeProvider
      */
     public function testEncode(string $decoded, string $encoded, string $comment): void
@@ -129,6 +324,8 @@ class PunycodeTest extends TestCase
     }
 
     /**
+     * @dataProvider rfcExamplesProvider
+     * @dataProvider wikipediaExamplesProvider
      * @dataProvider punycodeProvider
      */
     public function testDecode(string $decoded, string $encoded, string $comment): void
@@ -138,7 +335,7 @@ class PunycodeTest extends TestCase
 
     public function encodeMaxLengthDataProvider(): array
     {
-        return array_filter($this->punycodeProvider(), static function (array $data): bool {
+        return array_filter(self::rfcExamplesProvider(), static function (array $data): bool {
             return mb_strlen($data[1], 'utf-8') > 10;
         });
     }
@@ -157,7 +354,7 @@ class PunycodeTest extends TestCase
      */
     public function decodeMaxLengthDataProvider(): array
     {
-        return array_filter($this->punycodeProvider(), static function (array $data): bool {
+        return array_filter(self::rfcExamplesProvider(), static function (array $data): bool {
             return mb_strlen($data[0], 'utf-8') > 10;
         });
     }
@@ -176,7 +373,7 @@ class PunycodeTest extends TestCase
      */
     public function nonAsciiDataProvider(): array
     {
-        return array_filter($this->punycodeProvider(), static function (array $data): bool {
+        return array_filter(self::rfcExamplesProvider(), static function (array $data): bool {
             return preg_match('/[^\x00-\x7F]/', $data[0]) === 1;
         }) + [
             ["abc\u{FFFD}", '', 'Mixed ASCII and non-ASCII']
